@@ -1,74 +1,162 @@
-# ⏱ TaskbarTimer
+⏱ TaskbarTimer
 
-A lightweight countdown timer that lives in your **Windows system tray** with an always-on-top floating window.
 
----
 
-## Features
+A modern, minimal countdown timer with system tray controls and a floating always-on-top UI — designed for focus and productivity.
 
-- ✨ **Enhanced UI** — Glowing progress ring with pulse animation, hover effects, focus glows
-- 📊 **Live Progress** — % complete above timer, larger bold fonts
-- ⚙️ **Settings** — Toggle sound mute (⚙ button)
-- ⌨️ **Keyboard Shortcuts** — Space (pause/resume), R (reset), Esc (hide)
-- 🕐 **Countdown timer** — set any duration (5m, 1h30m, 90, 1:30:00, etc.)
-- 🔔 **Alarm sound** — plays a beep when timer expires (with pulse glow)
-- 📌 **Always-on-top** floating window — never buried under other apps
-- 🖱 **System tray icon** — shows live countdown, right-click for quick presets
-- ⚡ **Quick presets** — 5m, 10m, 25m (Pomodoro), 1h buttons
-- 🎯 **Draggable** — move the window anywhere on screen
-- 💡 **Minimal** — close the window, timer keeps running in tray
+📖 Overview
 
----
+TaskbarTimer is a lightweight desktop timer built for Windows users who want quick, distraction-free time tracking without opening bulky apps.
 
-## Option A — Run from Python (no install needed)
+It combines:
 
-**Requirements:** Python 3.8+, Windows
+A floating, frameless timer window
+A live-updating system tray icon
+Quick controls accessible anywhere
 
-```
-pip install pystray pillow
+Perfect for:
+
+🍅 Pomodoro sessions
+📚 Studying
+💻 Deep work
+🏋️ Workouts
+⏳ Time blocking
+✨ Features
+🎯 Core Functionality
+⏱ Countdown timer with second-level precision
+🔄 Circular progress ring visualization
+🧠 Smart state handling (pause, resume, reset, restart)
+🖥️ UI/UX
+Frameless, always-on-top floating window
+Clean dark-themed interface
+Draggable anywhere on screen
+Minimal and distraction-free
+⚡ Speed & Input
+Quick presets: 5m / 10m / 25m / 1h
+Flexible input parsing:
+5:00
+25m
+1h30m
+90 (minutes)
+📌 System Tray Integration
+Live countdown displayed in tray tooltip
+Dynamic tray icon with progress visualization
+Right-click menu:
+Show Timer
+Quick Start (5 / 10 / 25 min)
+Pause / Resume
+Reset
+Quit
+🔔 Notifications
+Audible alarm when timer completes
+Visual “DONE” state
+🖼️ Screenshots (Optional)
+
+Add screenshots here for better presentation
+
+/assets/screenshot1.png
+/assets/screenshot2.png
+📦 Installation
+⚡ Option 1 — Download Executable (Recommended)
+Go to the Releases section
+Download the latest .zip
+Extract the files
+Run:
+TaskbarTimer.exe
+
+✅ No Python required
+✅ Ready to use instantly
+
+🔧 Option 2 — Run from Source
+1. Clone the repository
+git clone https://github.com/yourusername/taskbartimer.git
+cd taskbartimer
+2. Install dependencies
+pip install pillow pystray
+3. Run the application
 python timer_app.py
-```
+🚀 Usage Guide
+▶ Starting a Timer
+Enter a time (e.g., 25m, 5:00)
+Press ▶ Start
+⏸ Controls
+Pause → ⏸
+Resume → ▶
+Reset → ↺
+🖱 System Tray
+Click tray icon → open timer
+Right-click → quick actions
+🧠 Input Format Reference
+Input	Meaning
+5:00	5 minutes
+25m	25 minutes
+1h	1 hour
+1h30m	1.5 hours
+90	90 minutes
+45s	45 seconds
+🏗️ Project Structure
+taskbartimer/
+│
+├── timer_app.py        # Main application
+├── assets/             # Icons / screenshots (optional)
+├── README.md
+└── requirements.txt
+🛠️ Tech Stack
+Python 3
+Tkinter → UI
+Pillow (PIL) → Tray icon rendering
+pystray → System tray integration
+winsound → Alarm notifications (Windows)
+⚙️ Building an Executable
 
----
+To create a standalone .exe:
 
-## Option B — Build a standalone .exe
+1. Install PyInstaller
+pip install pyinstaller
+2. Build
+pyinstaller --onefile --noconsole timer_app.py
+3. Output
+/dist/TaskbarTimer.exe
+🧩 Customization
 
-Double-click `build.bat` — it will install PyInstaller and package everything into:
+You can easily tweak:
 
-```
-dist\TaskbarTimer.exe
-```
+🎨 Colors (top of timer_app.py)
+⏱ Preset durations
+🔊 Alarm sound behavior
+🖼 Tray icon design
+📌 Roadmap
+ Multiple timers
+ Custom themes (light/dark toggle)
+ Desktop notifications
+ Keyboard shortcuts
+ Timer history / analytics
+ Config file support
+🐛 Known Issues
+Windows-only (uses winsound)
+Some systems may not support custom fonts in tray icon
+Multi-monitor positioning may vary
+🤝 Contributing
 
-No Python needed to run the `.exe`. Share it, pin it to startup, done.
+Contributions are welcome!
 
-**To auto-start with Windows:**
-1. Press `Win + R` → type `shell:startup` → Enter
-2. Copy `TaskbarTimer.exe` into that folder
+Fork the repo
+Create a branch (feature/new-feature)
+Commit changes
+Open a Pull Request
+📄 License
 
----
+This project is licensed under the MIT License.
 
-## How to use
+⭐ Support
 
-| Action | How |
-|--------|-----|
-| Set timer | Type `5:00`, `25`, `1h30m`, `90s` in the box → press Enter or ▶ |
-| Quick start | Click a preset button (5m, 10m, 25m, 1h) |
-| Pause/Resume | Click ⏸ Pause button or tray → Pause/Resume |
-| Reset | Click ↺ Reset |
-| Tray shortcuts | Right-click tray icon for quick 5/10/25m starts |
-| Hide window | Click × — timer keeps running in tray |
-| Show again | Double-click tray icon |
+If you find this useful:
 
----
+👉 Star the repo
+👉 Share it with others
+👉 Suggest features or improvements
 
-## Time input formats
-
-All of these work in the input box:
-
-- `5` → 5 minutes
-- `5:00` → 5 minutes
-- `1:30:00` → 1 hour 30 minutes
-- `25m` → 25 minutes
-- `1h30m` → 1 hour 30 minutes
-- `90s` → 90 seconds
-- `1h` → 1 hour
+🙌 Acknowledgments
+Python community
+Open-source UI inspiration
+Productivity enthusiasts worldwide
