@@ -69,7 +69,7 @@ TaskbarTimer.exe
 
 🔧 Option 2 — Run from Source
 1. Clone the repository
-git clone https://github.com/yourusername/taskbartimer.git
+git clone https://github.com/Aatman1/TaskbarTimer.git
 cd taskbartimer
 2. Install dependencies
 pip install pillow pystray
