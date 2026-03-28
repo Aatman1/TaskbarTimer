@@ -2,6 +2,13 @@
 
 
 
+
+
+
+
+
+
+
 A modern, minimal countdown timer with system tray controls and a floating always-on-top UI — designed for focus and productivity.
 
 📖 Overview
@@ -69,7 +76,7 @@ TaskbarTimer.exe
 
 🔧 Option 2 — Run from Source
 1. Clone the repository
-git clone https://github.com/Aatman1/TaskbarTimer.git
+git clone https://github.com/yourusername/taskbartimer.git
 cd taskbartimer
 2. Install dependencies
 pip install pillow pystray
