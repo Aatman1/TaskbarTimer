@@ -1,5 +1,7 @@
-# ⏱ TaskbarTimer
-![TaskTimer](TaskTimer_logo.svg)
+# TaskbarTimer
+<p align="center">
+  <img src="TaskTimer_logo.svg" alt="Description" width="400">
+</p>
 
 A sleek, feature-rich desktop timer and alarm application for Windows, built with Python and Tkinter. TaskbarTimer lives in your system tray and provides a dark-themed floating window with four integrated time-management tools.
 
