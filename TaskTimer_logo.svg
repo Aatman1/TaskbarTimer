@@ -1,0 +1,11 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background matching C["bg"] -->
+  <rect width="512" height="512" rx="128" fill="#10111a"/>
+  
+  <!-- The Progress Ring (Concept 1) -->
+  <path d="M256 120C180.889 120 120 180.889 120 256C120 331.111 180.889 392 256 392C331.111 392 392 331.111 392 256" 
+        stroke="#7eb8f7" stroke-width="24" stroke-linecap="round"/>
+        
+  <!-- The Central Dot -->
+  <circle cx="256" cy="256" r="32" fill="#7eb8f7"/>
+</svg>

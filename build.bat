@@ -5,7 +5,7 @@ REM  Run this once to create a standalone .exe in the dist\ folder
 REM ─────────────────────────────────────────────────────────────────
 
 echo Installing dependencies...
-pip install pystray pillow pyinstaller
+pip install pystray pillow pyinstaller tzdata
 
 echo.
 echo Building TaskbarTimer.exe ...
@@ -14,6 +14,7 @@ pyinstaller --noconfirm ^
     --windowed ^
     --name "TaskbarTimer" ^
     --icon NONE ^
+    --add-data "TaskTimer_logo.svg;." ^
     timer_app.py
 
 echo.
