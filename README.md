@@ -3,22 +3,23 @@
   <img src="TaskTimer_logo.svg" alt="Description" width="400">
 </p>
 
-A sleek, feature-rich desktop timer and alarm application for Windows, built with Python and Tkinter. TaskbarTimer lives in your system tray and provides a dark-themed floating window with four integrated time-management tools.
-## 📸 Screenshots
-
-| Timer & Stopwatch | Alarm & World Clock |
-| :---: | :---: |
-| <img src="screenshots/screenshot1.png" width="250"> | <img src="screenshots/screenshot2.png" width="250"> |
-| *Timer View* | *Alarm View* |
-| <img src="screenshots/screenshot3.png" width="250"> | <img src="screenshots/screenshot4.png" width="250"> |
-| *Stopwatch View* | *World Clock View* |
-
-
 ![Platform](https://img.shields.io/badge/platform-Windows-blue)
 ![Python](https://img.shields.io/badge/python-3.9%2B-green)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
 ![Status](https://img.shields.io/badge/status-stable-success)
+
+A sleek, feature-rich desktop timer and alarm application for Windows, built with Python and Tkinter. TaskbarTimer lives in your system tray and provides a dark-themed floating window with four integrated time-management tools.
+## 📸 Screenshots
+
+| Timer & Stopwatch | Alarm & World Clock |
+| :---: | :---: |
+| <img src="screenshots/Screenshot1.png" width="250"> | <img src="screenshots/Screenshot2.png" width="250"> |
+| *Timer View* | *Alarm View* |
+| <img src="screenshots/Screenshot3.png" width="250"> | <img src="screenshots/Screenshot4.png" width="250"> |
+| *Stopwatch View* | *World Clock View* |
+
+
 
 ---
 
