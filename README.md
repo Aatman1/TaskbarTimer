@@ -4,7 +4,14 @@
 </p>
 
 A sleek, feature-rich desktop timer and alarm application for Windows, built with Python and Tkinter. TaskbarTimer lives in your system tray and provides a dark-themed floating window with four integrated time-management tools.
+## 📸 Screenshots
 
+| Timer & Stopwatch | Alarm & World Clock |
+| :---: | :---: |
+| <img src="screenshots/screenshot1.png" width="250"> | <img src="screenshots/screenshot2.png" width="250"> |
+| *Timer View* | *Alarm View* |
+| <img src="screenshots/screenshot3.png" width="250"> | <img src="screenshots/screenshot4.png" width="250"> |
+| *Stopwatch View* | *World Clock View* |
 
 
 ![Platform](https://img.shields.io/badge/platform-Windows-blue)
@@ -93,8 +100,8 @@ pystray
 
 ### 1. Clone or download
 ```bash
-git clone https://github.com/your-username/taskbar-timer.git
-cd taskbar-timer
+git clone https://github.com/Aatman1/taskbartimer.git
+cd taskbartimer
 ```
 
 ### 2. Install optional dependencies
