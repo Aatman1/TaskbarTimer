@@ -38,7 +38,7 @@ state = None
 
 
 # -- Win11 DWM helpers --
-DWMWA_USE_IMMERSIVE_DARK_MODE   = 20
+DWMWA_USE_IMMERSIVE_DARK_MODE   = 70
 DWMWA_WINDOW_CORNER_PREFERENCE  = 33
 DWMWCP_ROUND                    = 2
 
@@ -131,12 +131,14 @@ CONFIG_PATH = Path.home() / ".timer_alarm_v3.json"
 
 # -- Custom Rounded Button --
 class RoundedButton(tk.Canvas):
-    def __init__(self, parent, text, callback, width=100, height=40, radius=20, color=C["accent_d"], hover_color=C["accent"], fg=C["white"], font=("Segoe UI", 10, "bold")):
+    def __init__(self, parent, text, callback, width=100, height=40, radius=20, color=C["accent_d"], hover_color=C["accent"], fg=C["white"], hover_fg=None, font=("Segoe UI", 10, "bold")):
         super().__init__(parent, width=width, height=height, bg=parent["bg"], highlightthickness=0, cursor="hand2")
         self.callback = callback
         self.color = color
         self.hover_color = hover_color
         self.fg = fg
+        self.hover_fg = hover_fg if hover_fg else fg
+        self._hovering = False
         self.radius = radius
         self.text = text
         self.font = font
@@ -160,10 +162,16 @@ class RoundedButton(tk.Canvas):
         self.create_oval(w-r*2, h-r*2, w, h, fill=fill, outline="")
         self.create_rectangle(r, 0, w-r, h, fill=fill, outline="")
         self.create_rectangle(0, r, w, h-r, fill=fill, outline="")
-        self.create_text(w/2, h/2, text=self.text, fill=self.fg, font=self.font)
+        text_col = self.hover_fg if self._hovering else self.fg
+        self.create_text(w/2, h/2, text=self.text, fill=text_col, font=self.font)
 
-    def _on_enter(self, e): self.draw(self.hover_color)
-    def _on_leave(self, e): self.draw(self.color)
+    def _on_enter(self, e):
+        self._hovering = True
+        self.draw(self.hover_color)
+
+    def _on_leave(self, e):
+        self._hovering = False
+        self.draw(self.color)
     
     def config_text(self, new_text, new_color=None):
         self.text = new_text
@@ -299,6 +307,14 @@ class App(tk.Tk):
         if a < 0.96:
             self.attributes("-alpha", min(0.96, a+0.08))
             self.after(14, self._fade_in)
+
+    def toggle_visibility(self):
+        if self.state() == "normal":
+            self.withdraw()
+        else:
+            self.deiconify()
+            self.lift()
+            self.attributes("-topmost", True)
 
     def destroy(self):
         self._stop_tray_icon() # Ensure tray icon is stopped
@@ -565,6 +581,8 @@ class App(tk.Tk):
         self._sw_canvas.pack(side="left", fill="both", expand=True)
         self._sw_scrollbar.pack(side="right", fill="y")
         self._sw_lap_list.bind("<Configure>", lambda e: self._sw_canvas.configure(scrollregion=self._sw_canvas.bbox("all")))
+        self._sw_canvas.bind("<MouseWheel>", self._on_sw_scroll)
+        self._sw_lap_list.bind("<MouseWheel>", self._on_sw_scroll)
 
     def _sw_toggle(self):
         self._sw_running = not self._sw_running
@@ -583,13 +601,26 @@ class App(tk.Tk):
             self._render_laps()
 
     def _render_laps(self):
+        # Preserve scroll position
+        y_scroll = self._sw_canvas.yview()[0]
+
         for w in self._sw_lap_list.winfo_children(): w.destroy()
         for i, lap_time in enumerate(reversed(self._sw_laps)):
             idx = len(self._sw_laps) - i
             f = tk.Frame(self._sw_lap_list, bg=C["surface"], pady=6)
             f.pack(fill="x", pady=1)
-            tk.Label(f, text=f"Lap {idx}", bg=C["surface"], fg=C["muted"], font=("Segoe UI", 9)).pack(side="left", padx=15)
-            tk.Label(f, text=fmt_ms(lap_time*1000), bg=C["surface"], fg=C["text"], font=("Consolas", 11)).pack(side="right", padx=15)
+            l1 = tk.Label(f, text=f"Lap {idx}", bg=C["surface"], fg=C["muted"], font=("Segoe UI", 9))
+            l1.pack(side="left", padx=15)
+            l2 = tk.Label(f, text=fmt_ms(lap_time*1000), bg=C["surface"], fg=C["text"], font=("Consolas", 11))
+            l2.pack(side="right", padx=15)
+
+            # Ensure children widgets also propagate scroll events
+            for widget in (f, l1, l2):
+                widget.bind("<MouseWheel>", self._on_sw_scroll)
+
+        # Restore scroll position
+        self._sw_lap_list.update_idletasks()
+        self._sw_canvas.yview_moveto(y_scroll)
 
     def _sw_tick(self):
         if not self._sw_running: return
@@ -603,6 +634,10 @@ class App(tk.Tk):
         self.sw_btn.config_text("START", C["accent_d"])
         self.sw_lap_btn.config_text("LAP", C["surface2"])
         self._render_laps()
+
+    def _on_sw_scroll(self, event):
+        """Handle mouse wheel scrolling for the stopwatch lap canvas."""
+        self._sw_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
     # -- ALARM PANEL --
     def _build_alarm_panel(self):
@@ -620,7 +655,7 @@ class App(tk.Tk):
         self._a_time_entry = tk.Entry(inputs, textvariable=self._a_time_var, width=6, bg=C["surface2"], fg=C["text"], 
                  font=("Consolas",14, "bold"), relief="flat", insertbackground=C["accent"], justify="center")
         self._a_time_entry.pack(side="left", padx=5)
-        self._ampm_btn = RoundedButton(inputs, datetime.now().strftime("%p"), self._toggle_ampm, width=45, height=34, radius=10, color=C["surface2"], fg=C["accent"])
+        self._ampm_btn = RoundedButton(inputs, datetime.now().strftime("%p"), self._toggle_ampm, width=45, height=34, radius=10, color=C["surface2"], fg=C["accent"], hover_fg=C["white"])
         if self._use_12hr_format: self._ampm_btn.pack(side="left", padx=2)
         
         self._a_label_var = tk.StringVar(value="New Alarm")
@@ -644,6 +679,8 @@ class App(tk.Tk):
         self._alarm_scrollbar.pack(side="right", fill="y")
         
         self._alarm_list_frame.bind("<Configure>", lambda e: self._alarm_canvas.configure(scrollregion=self._alarm_canvas.bbox("all")))
+        self._alarm_canvas.bind("<MouseWheel>", self._on_alarm_scroll)
+        self._alarm_list_frame.bind("<MouseWheel>", self._on_alarm_scroll)
         
         self._alarm_render()
 
@@ -676,19 +713,29 @@ class App(tk.Tk):
         del self.alarms[idx]
         save_alarms(self.alarms); self._alarm_render()
 
+    def _on_alarm_scroll(self, event):
+        """Handle mouse wheel scrolling for the alarm list canvas."""
+        self._alarm_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
     def _alarm_render(self):
         for w in self._alarm_list_frame.winfo_children(): w.destroy()
         
         if not self.alarms:
-            tk.Label(self._alarm_list_frame, text="No alarms set", bg=C["bg"], fg=C["muted2"], font=("Segoe UI", 10)).pack(pady=40)
+            lbl = tk.Label(self._alarm_list_frame, text="No alarms set", bg=C["bg"], fg=C["muted2"], font=("Segoe UI", 10))
+            lbl.pack(pady=40)
+            lbl.bind("<MouseWheel>", self._on_alarm_scroll)
             return
             
         if self._ringing:
             f = tk.Frame(self._alarm_list_frame, bg=C["alarm_d"], pady=12)
             f.pack(fill="x", pady=(0, 10))
-            tk.Label(f, text="ALARM!", bg=C["alarm_d"], fg=C["white"], font=("Segoe UI", 11, "bold")).pack(side="left", padx=15)
-            RoundedButton(f, "DISMISS", self._dismiss_ringing, width=80, height=30, radius=15, color=C["white"], fg=C["alarm_d"]).pack(side="right", padx=5)
-            RoundedButton(f, "SNOOZE", self._snooze_ringing, width=80, height=30, radius=15, color=C["alarm"], fg=C["white"]).pack(side="right", padx=5)
+            l1 = tk.Label(f, text="ALARM!", bg=C["alarm_d"], fg=C["white"], font=("Segoe UI", 11, "bold"))
+            l1.pack(side="left", padx=15)
+            b1 = RoundedButton(f, "DISMISS", self._dismiss_ringing, width=80, height=30, radius=15, color=C["white"], fg=C["alarm_d"])
+            b1.pack(side="right", padx=5)
+            b2 = RoundedButton(f, "SNOOZE", self._snooze_ringing, width=80, height=30, radius=15, color=C["alarm"], fg=C["white"])
+            b2.pack(side="right", padx=5)
+            for w in (f, l1, b1, b2): w.bind("<MouseWheel>", self._on_alarm_scroll)
 
         for i, a in enumerate(self.alarms):
             is_on = a.get("on", False)
@@ -714,12 +761,16 @@ class App(tk.Tk):
                 except ValueError: pass # Keep original if parsing fails
             time_lbl = tk.Label(txt_f, text=display_time_str, bg=row_bg, fg=C["text"] if is_on else C["muted"], font=("Consolas", 18, "bold"), anchor="w")
             time_lbl.pack(fill="x")
-            tk.Label(txt_f, text=a["label"].upper(), bg=row_bg, fg=C["muted"], font=("Segoe UI", 8, "bold"), anchor="w").pack(fill="x")
+            sub_lbl = tk.Label(txt_f, text=a["label"].upper(), bg=row_bg, fg=C["muted"], font=("Segoe UI", 8, "bold"), anchor="w")
+            sub_lbl.pack(fill="x")
             
             # Delete button
             del_btn = tk.Label(f, text="×", bg=row_bg, fg=C["muted"], font=("Segoe UI", 18), cursor="hand2", width=2)
             del_btn.pack(side="right", padx=10)
             del_btn.bind("<Button-1>", lambda e, idx=i: self._alarm_delete(idx))
+            
+            for w in (f, dot, txt_f, time_lbl, sub_lbl, del_btn):
+                w.bind("<MouseWheel>", self._on_alarm_scroll)
 
     # -- WORLD PANEL --
     def _build_world_panel(self):
@@ -875,7 +926,7 @@ def run_tray(app: App):
         return lambda icon, item: app.after(0, _do)
 
     menu = pystray.Menu(
-        pystray.MenuItem("Show Timer",    ui(app.deiconify), default=True),
+        pystray.MenuItem("Show/Hide Timer", ui(app.toggle_visibility), default=True),
         pystray.Menu.SEPARATOR,
         pystray.MenuItem("Quick Start", pystray.Menu(
             pystray.MenuItem("5 minutes", quick_start(300,  "5m")),

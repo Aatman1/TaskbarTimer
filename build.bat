@@ -14,7 +14,7 @@ pyinstaller --noconfirm ^
     --windowed ^
     --name "TaskbarTimer" ^
     --icon "tasktimer.ico" ^
-    --add-data "TaskTimer_logo.svg;." ^
+    --add-data "tasktimer_logo.png;." ^
     timer_app.py
 
 echo.

@@ -12,12 +12,14 @@
 A sleek, feature-rich desktop timer and alarm application for Windows, built with Python and Tkinter. TaskbarTimer lives in your system tray and provides a dark-themed floating window with four integrated time-management tools.
 ## 📸 Screenshots
 
-| Timer & Stopwatch | Alarm & World Clock |
+
+
+| Timer View | Alarm View |
 | :---: | :---: |
 | <img src="screenshots/Screenshot1.png" width="250"> | <img src="screenshots/Screenshot2.png" width="250"> |
-| *Timer View* | *Alarm View* |
+| Stopwatch View | World Clock View |
 | <img src="screenshots/Screenshot3.png" width="250"> | <img src="screenshots/Screenshot4.png" width="250"> |
-| *Stopwatch View* | *World Clock View* |
+
 
 
 
